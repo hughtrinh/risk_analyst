@@ -4,6 +4,7 @@ Sample: Kết nối SQL Server bằng PySpark với JDBC
 import sys
 import os
 from pathlib import Path
+import traceback
 from typing import Any, Mapping
 
 from pyspark.sql import SparkSession
@@ -146,14 +147,39 @@ def read_df_from_csv(spark, csv_path, schema=None):
         print(f"Error read csv file: {str(e)}")
         return None
 
-def write_df_to_parquet(df, parquet_path, mode_write):
+def write_df_to_parquet(
+    df,
+    parquet_path,
+    mode_write="overwrite"
+):
     try:
-        if str(mode_write).lower() == "overwrite":
-            return write_df_to_parquet(df, parquet_path)
-        df.write.mode(mode_write).parquet(parquet_path)
+        mode_write = str(mode_write).lower().strip()
+
+        valid_modes = {
+            "overwrite",
+            "append",
+            "ignore",
+            "error",
+            "errorifexists"
+        }
+
+        if mode_write not in valid_modes:
+            raise ValueError(
+                f"Chế độ ghi không hợp lệ: {mode_write}. "
+                f"Các chế độ hỗ trợ: {valid_modes}"
+            )
+
+        (
+            df.write
+            .mode(mode_write)
+            .parquet(parquet_path)
+        )
+
         return True
+
     except Exception as e:
         print(f"Error write parquet file: {str(e)}")
+        traceback.print_exc()
         return False
     
 def write_df_to_table(df, table_name, mode_write):
