@@ -496,7 +496,7 @@ def _0030204_prc_mdm_card(etl_date: str):
         )
 
         success_parquet = write_df_to_parquet(
-            df=df_mdm_cards,
+            df=df_mdm_cards.coalesce(1),
             parquet_path=output_path,
             mode_write="overwrite"
         )

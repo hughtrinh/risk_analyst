@@ -215,7 +215,7 @@ def _0030202_prc_mdm_merchant(etl_date: str):
         )
 
         success_parquet = write_df_to_parquet(
-            df=df_mdm_merchant,
+            df=df_mdm_merchant.coalesce(1),
             parquet_path=output_path,
             mode_write="overwrite"
         )

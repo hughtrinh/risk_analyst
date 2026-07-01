@@ -270,7 +270,7 @@ def _0030203_prc_mdm_users(etl_date: str):
         )
 
         success_parquet = write_df_to_parquet(
-            df=df_mdm_users,
+            df=df_mdm_users.coalesce(1),
             parquet_path=output_path,
             mode_write="overwrite"
         )

@@ -156,7 +156,7 @@ def _0030201_prc_mdm_sub_transactions(etl_date: str):
         )
 
         success_parquet = write_df_to_parquet(
-            df=df_mdm_sub_transactions,
+            df=df_mdm_sub_transactions.coalesce(1),
             parquet_path=output_path,
             mode_write="overwrite"
         )

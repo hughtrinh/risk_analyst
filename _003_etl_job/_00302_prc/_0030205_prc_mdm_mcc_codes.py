@@ -320,7 +320,7 @@ def _0030205_prc_mdm_mcc_codes(etl_date: str):
         )
 
         success_parquet = write_df_to_parquet(
-            df=df_mdm_mcc_codes,
+            df=df_mdm_mcc_codes.coalesce(1),
             parquet_path=output_path,
             mode_write="overwrite"
         )
